@@ -20,6 +20,8 @@
   justify-self: start;
   font-family: var(--font-logo);
   font-size: 2rem; /* 32px */
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
   font-weight: 700;
   color: #fff;
   text-decoration: none;

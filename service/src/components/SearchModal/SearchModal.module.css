@@ -3,6 +3,9 @@
   --field-h: clamp(2.75rem, 1.4rem + 2.17vw, 4rem);
   --duration: 0.5s;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --close-duration: 0.4s;
+  --close-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --soft-ease: cubic-bezier(0.33, 1, 0.68, 1); 
 
   inset: 0;
   width: 100%;
@@ -23,8 +26,8 @@
 
   /* держит dialog на экране, пока проигрывается анимация закрытия */
   transition:
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
+    display var(--close-duration) allow-discrete,
+    overlay var(--close-duration) allow-discrete;
 
   &:not([open]) {
     display: none;
@@ -37,13 +40,14 @@
   backdrop-filter: blur(12px);
   opacity: 0;
   transition:
-    opacity var(--duration) var(--ease),
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
+    opacity var(--close-duration) var(--close-ease),
+    display var(--close-duration) allow-discrete,
+    overlay var(--close-duration) allow-discrete;
 }
 
 .dialog[open]::backdrop {
   opacity: 1;
+  transition: opacity var(--duration) var(--ease);
 }
 
 .searchRow,
@@ -51,8 +55,8 @@
   width: var(--panel-w);
   opacity: 0;
   transition:
-    opacity var(--duration) var(--ease),
-    transform var(--duration) var(--ease);
+    opacity var(--close-duration) var(--close-ease),
+    transform var(--close-duration) var(--close-ease);
 }
 
 .searchRow {
@@ -76,17 +80,32 @@
 }
 
 .results {
+  position: relative; 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  justify-items: center;
   gap: clamp(0.75rem, 2vw, 1.5rem);
   padding: clamp(1rem, 3vw, 2.25rem);
+}
+
+
+.result {
+  display: grid;
+  justify-items: center;
+  will-change: transform; 
 }
 
 .empty {
   padding: 4rem 1.5rem;
   text-align: center;
   color: var(--text);
+  animation: result-in 0.6s var(--ease) backwards;
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.96);
+  }
 }
 
 .emptyFace {
@@ -107,6 +126,9 @@
 .dialog[open] .panel {
   opacity: 1;
   transform: none;
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
 }
 
 @starting-style {
@@ -125,7 +147,10 @@
   }
 }
 
+
+
 .field {
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
@@ -136,28 +161,132 @@
   background: var(--surface);
   box-shadow: var(--shadow-sm);
   color: var(--text-h);
+  cursor: text;
+  transition: box-shadow 0.5s var(--soft-ease);
+
+  & .searchIcon {
+    transition:
+      color 0.5s var(--soft-ease),
+      transform 0.5s var(--soft-ease);
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    inset: calc(-2px - var(--pulse) * 0.5px);
+    padding: calc(2px + var(--pulse) * 0.5px);
+    border-radius: inherit;
+    background:
+      linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) calc(60% + var(--pulse) * 40%), transparent), transparent)
+      -22% 0 / 35% 100% no-repeat;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s var(--soft-ease);
+    animation: sweep 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate paused; /* 3.2s — тот же ритм, что у слов в плейсхолдере */
+  }
+
+  &:focus-within {
+    box-shadow: var(--shadow-md);
+
+    &::before {
+      opacity: 1;
+      animation-play-state: running;
+    }
+
+    & .searchIcon {
+      color: var(--accent);
+      transform: scale(1.08);
+    }
+  }
+}
+
+
+@property --pulse {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+
+@keyframes sweep {
+  0% {
+    background-position: -22% 0;
+    --pulse: 1;
+  }
+  40%, 60% {
+    --pulse: 0;
+  }
+  100% {
+    background-position: 122% 0;
+    --pulse: 1;
+  }
+}
+
+.inputWrap {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  min-width: 0;
 }
 
 .input {
   flex: 1;
   min-width: 0;
+  padding: 0; 
   border: none;
   background: none;
   outline: none;
   font: inherit;
   font-size: var(--fs-text);
   color: inherit;
-
-  &::placeholder {
-    color: var(--text);
-  }
+  caret-color: var(--accent);
 
   &::-webkit-search-cancel-button {
     appearance: none;
   }
 }
 
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--fs-text);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.placeholderWord {
+  display: inline-block;
+  animation: word-cycle 3.2s cubic-bezier(0.37, 0, 0.63, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes word-cycle {
+  0% {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+  20%, 80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.6em);
+  }
+}
+
 .close {
+  position: relative;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -170,15 +299,58 @@
   box-shadow: var(--shadow-sm);
   color: var(--text-h);
   cursor: pointer;
-  transition: box-shadow 0.2s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent; 
+  transition:
+    background-color 0.7s var(--soft-ease),
+    color 0.7s var(--soft-ease),
+    box-shadow 0.7s var(--soft-ease),
+    transform 0.7s var(--soft-ease);
 
-  &:hover {
-    box-shadow: var(--shadow-md);
+  /* кольцо */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--accent);
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
   }
 
   &:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+}
+
+
+@media (hover: hover) {
+  .close:hover {
+    background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+    color: var(--accent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 22%, transparent);
+    transform: scale(1.03);
+
+    &::after {
+      animation: ring 1.4s var(--soft-ease);
+    }
+
+    &:active {
+      transform: scale(0.94);
+      transition-duration: 0.15s;
+    }
+  }
+}
+
+@keyframes ring {
+  from {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.35);
   }
 }
 
@@ -208,8 +380,17 @@
 @media (prefers-reduced-motion: reduce) {
   .dialog,
   .dialog::backdrop,
+  .dialog[open]::backdrop,
   .searchRow,
-  .panel {
+  .panel,
+  .dialog[open] .searchRow,
+  .dialog[open] .panel {
     transition: none;
+  }
+
+  .empty,
+  .placeholderWord,
+  .field::before {
+    animation: none;
   }
 }

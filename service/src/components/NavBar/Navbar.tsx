@@ -6,7 +6,7 @@ import type { User } from '../../types'
 import SearchModal from '../SearchModal/SearchModal'
 import styles from './Navbar.module.css'
 
-// TODO: брать текущего пользователя из API (src/api/auth.ts). null — не залогинен
+// TODO: брать текущего пользователя из API (src/api/users.ts). null — не залогинен
 const user = null as User | null
 
 export default function NavBar() {
