@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { useTheme } from '../../hooks/useTheme'
 import type { User } from '../../types'
+import SearchModal from '../SearchModal/SearchModal'
 import styles from './Navbar.module.css'
 
 // TODO: брать текущего пользователя из API (src/api/auth.ts). null — не залогинен
@@ -9,6 +11,7 @@ const user = null as User | null
 
 export default function NavBar() {
   const { theme, toggleTheme } = useTheme()
+  const [searchOpen, setSearchOpen] = useState(false)
 
   return (
     <header className={styles.navbar}>
@@ -17,11 +20,11 @@ export default function NavBar() {
       </Link>
 
       <div className={styles.actions}>
-        {/* TODO: открывать модалку поиска */}
         <button
           type="button"
           className={`${styles.iconButton} ${styles.search}`}
           aria-label="Search"
+          onClick={() => setSearchOpen(true)}
         >
           <span className={`${styles.icon} ${styles.searchIcon}`} />
         </button>
@@ -47,6 +50,8 @@ export default function NavBar() {
           </Link>
         )}
       </div>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   )
 }

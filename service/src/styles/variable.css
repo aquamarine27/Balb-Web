@@ -29,7 +29,11 @@
 
   /* Сетка */
   --container: 70vw;
-  --gutter: clamp(1rem, 4vw, 2.5rem);    
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --navbar-h: 10rem;
+
+  /* Скругление */
+  --radius: 2.25rem; /* 36px */
 
   /* Шрифты */
   --font-text: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -46,4 +50,10 @@
 
   --lh-text: 1.5;
   --lh-heading: 1.2;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --navbar-h: 4rem;
+  }
 }

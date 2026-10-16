@@ -13,7 +13,7 @@
   z-index: 10;
   display: flex;
   align-items: center;
-  height: 10rem; /* 80px */
+  height: var(--navbar-h);
 }
 
 .logo {
@@ -29,6 +29,8 @@
 }
 
 .actions {
+  --btn: clamp(2.5rem, 1.52rem + 1.44vw, 3.25rem);
+
   justify-self: end;
   gap: 2rem; /* 32px */
 }
@@ -36,8 +38,8 @@
 .iconButton {
   display: grid;
   place-items: center;
-  width: 3.25rem; /* 52px */
-  height: 3.25rem;
+  width: var(--btn);
+  height: var(--btn);
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -56,7 +58,9 @@
   background: var(--surface);
   box-shadow: var(--shadow-sm);
 
-  &:hover {
+
+  &:hover,
+  &:focus-visible {
     box-shadow: var(--shadow-md);
   }
 }
@@ -68,27 +72,27 @@
 }
 
 .searchIcon {
-  width: 1.25rem; /* 20px */
-  height: 1.25rem;
+  width: calc(var(--btn) * 0.385);
+  height: calc(var(--btn) * 0.385);
   mask-image: url('../../assets/navbar/search-icon.png');
 }
 
 .moonIcon {
-  width: 1.75rem; /* 28px */
-  height: 1.75rem;
+  width: calc(var(--btn) * 0.54);
+  height: calc(var(--btn) * 0.54);
   mask-image: url('../../assets/navbar/moon.png');
 }
 
 .avatar {
   display: grid;
   place-items: center;
-  width: 3.5rem; /* 56px */
-  height: 3.5rem;
+  width: calc(var(--btn) * 1.08);
+  height: calc(var(--btn) * 1.08);
   overflow: hidden;
   border-radius: 50%;
   background: var(--avatar-bg);
   color: #fff;
-  font-weight: 700;
+  font-weight: var(--fw-heading);
   text-decoration: none;
 
   & img {
@@ -102,8 +106,8 @@
 .login {
   padding-bottom: 0.125rem;
   color: var(--text-h);
-  font-size: var(--fw-text);
-  font-weight: 600;
+  font-size: var(--fs-text);
+  font-weight: var(--fw-heading);
   text-decoration: none;
   background: linear-gradient(var(--link-underline), var(--link-underline)) left bottom / 0% 2px no-repeat;
   transition: background-size 0.35s ease;
@@ -124,33 +128,18 @@
   }
 }
 
-@media (max-width: 640px) {
-  .logo,
-  .actions {
-    height: 4rem;
-  }
 
+.logo:focus-visible,
+.search:focus-visible {
+  outline: none;
+}
+
+@media (max-width: 640px) {
   .logo {
     font-size: 1.5rem;
   }
 
   .actions {
     gap: 0.75rem;
-  }
-
-  .iconButton,
-  .avatar {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  .searchIcon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .moonIcon {
-    width: 1.375rem;
-    height: 1.375rem;
   }
 }
