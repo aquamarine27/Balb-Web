@@ -1,0 +1,39 @@
+:root {
+  /* Цвета */
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  /* Шрифты */
+  --font-text: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  /* Насыщенность */
+  --fw-text: 500;
+  --fw-heading: 700;
+
+  /* Размеры и межстрочный интервалы: от экрана 360px до 1280px */
+  --fs-text: clamp(1rem, 0.951rem + 0.217vw, 1.125rem);      /* 16px → 18px */
+  --fs-heading: clamp(1.5rem, 1.304rem + 0.87vw, 2rem);      /* 24px → 32px */
+
+  --lh-text: 1.5;
+  --lh-heading: 1.2;
+}
+
+
+/*dark theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+  }
+}
