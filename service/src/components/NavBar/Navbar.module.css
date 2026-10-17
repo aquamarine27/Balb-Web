@@ -105,18 +105,36 @@
 }
 
 
+
 .login {
-  padding-bottom: 0.125rem;
+  position: relative;
+  padding: 0 0 0.125rem;
+  border: none;
+  background: none;
+  cursor: pointer;
   color: var(--text-h);
   font-size: var(--fs-text);
   font-weight: var(--fw-heading);
   text-decoration: none;
-  background: linear-gradient(var(--link-underline), var(--link-underline)) left bottom / 0% 2px no-repeat;
-  transition: background-size 0.35s ease;
 
-  &:hover,
-  &:focus-visible {
-    background-size: 100% 2px;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--link-underline);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 }
 

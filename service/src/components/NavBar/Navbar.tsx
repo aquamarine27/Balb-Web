@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 
 import { useTheme } from '../../hooks/useTheme'
 import type { User } from '../../types'
+import AuthModal from '../AuthModal/AuthModal'
 import SearchModal from '../SearchModal/SearchModal'
 import styles from './Navbar.module.css'
 
@@ -12,6 +13,7 @@ const user = null as User | null
 export default function NavBar() {
   const { theme, toggleTheme } = useTheme()
   const [searchOpen, setSearchOpen] = useState(false)
+  const [authOpen, setAuthOpen] = useState(false)
 
   return (
     <header className={styles.navbar}>
@@ -45,13 +47,14 @@ export default function NavBar() {
             {user.avatarUrl ? <img src={user.avatarUrl} alt="" /> : user.username[0].toUpperCase()}
           </Link>
         ) : (
-          <Link to="/login" className={styles.login}>
+          <button type="button" className={styles.login} onClick={() => setAuthOpen(true)}>
             Login
-          </Link>
+          </button>
         )}
       </div>
 
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </header>
   )
 }

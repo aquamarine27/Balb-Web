@@ -63,3 +63,8 @@ select {
   font: inherit;
   color: inherit;
 }
+
+
+button {
+  user-select: none;
+}
