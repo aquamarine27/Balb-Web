@@ -1,0 +1,97 @@
+/* Появляется с задержкой 0.3s: если ответ пришёл быстро, лоадер не мелькнёт */
+.loader {
+  --cycle: 2s;
+  --ease: cubic-bezier(0.37, 0, 0.63, 1); /* плавный синус */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 4rem 1rem;
+  text-align: center;
+  animation: appear 0.6s var(--ease) 0.3s backwards;
+}
+
+/* Точки и буквы — одна волна слева направо */
+.dots {
+  display: flex;
+  gap: 0.5rem;
+
+  & span {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: var(--text);
+    will-change: transform;
+    animation: wave var(--cycle) var(--ease) infinite;
+  }
+
+  & span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  & span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+/* Волна проходит по всей фразе за 1.2s, какой бы длины она ни была.
+   will-change выносит буквы на отдельный слой: без него браузер на каждом кадре
+   перерисовывает текст с привязкой к пикселям, и движение получается рваным */
+.text {
+  font-size: var(--fs-text);
+  color: var(--text);
+
+  & span {
+    display: inline-block;
+    will-change: transform;
+    animation: letter var(--cycle) var(--ease) infinite;
+    animation-delay: calc(var(--i) / var(--n) * 1.2s - var(--cycle)); /* минус цикл — волна идёт сразу, без паузы на старте */
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes wave {
+  0%, 60%, 100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(0.85);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-0.375rem) scale(1);
+  }
+}
+
+/* Буква двигается только 30% цикла (0.6s) — одновременно поднята лишь пара соседних */
+@keyframes letter {
+  0%, 30%, 100% {
+    color: var(--text);
+    transform: translateY(0) scale(1);
+  }
+  15% {
+    color: var(--text-h);
+    transform: translateY(-0.12em) scale(1.12);
+  }
+}
+
+@keyframes fade {
+  0%, 60%, 100% { opacity: 0.35; }
+  30% { opacity: 1; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .dots span {
+    animation-name: fade;
+  }
+
+  .text span {
+    animation: none;
+  }
+}

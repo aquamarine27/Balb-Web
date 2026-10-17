@@ -1,0 +1,23 @@
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [content-start] minmax(0, var(--container)) [content-end]
+    minmax(var(--gutter), 1fr) [full-end];
+  grid-template-rows: auto 1fr;
+}
+
+
+
+.main {
+  grid-column: full;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: start;
+}
+
+.main > * {
+  grid-column: content;
+}

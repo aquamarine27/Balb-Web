@@ -1,10 +1,19 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="./src/assets/favicon.svg" />
     <title>BALB</title>
+    <script>
+      let theme = 'light' // тема по умолчанию
+      try {
+        const saved = localStorage.getItem('theme')
+        if (saved === 'light' || saved === 'dark') theme = saved
+      } 
+      catch {}
+      document.documentElement.dataset.theme = theme
+    </script>
   </head>
   <body>
     <div id="root"></div>

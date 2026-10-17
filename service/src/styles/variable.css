@@ -1,39 +1,62 @@
 :root {
+  color-scheme: light dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root {
   /* Цвета */
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
+  --text: light-dark(#6b6375, #9ca3af);
+  --text-h: light-dark(#08060d, #f3f4f6);
+  --bg: light-dark(#fff, #16171d);
+  --surface: light-dark(#fff, #23242c);
+  --border: light-dark(#e5e4e7, #2e303a);
+  --accent: light-dark(#8a5aca, #a983e0);
+  --accent-bg: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent) 50%, transparent);
+  --avatar-bg: #7b7ff0;
+  --link-underline: light-dark(rgba(123, 127, 240, 0.7), rgba(165, 168, 255, 0.7));
+  --danger: light-dark(#ef4444, #f87171);
+
+  /* Тени */
+  --shadow-sm: 0 2px 8px light-dark(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.5));
+  --shadow-md: 0 4px 14px light-dark(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.6));
+
+  /* Сетка */
+  --container: max(70vw, 23rem); 
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --navbar-h: 10rem;
+
+  /* Скругление */
+  --radius: 2.25rem; /* 36px */
+  --radius-sm: 0.875rem; /* 14px — поля ввода, небольшие кнопки */
 
   /* Шрифты */
   --font-text: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-logo: 'Benzin', 'Inter', system-ui, sans-serif;
 
   /* Насыщенность */
   --fw-text: 500;
-  --fw-heading: 700;
+  --fw-heading: 600;
 
-  /* Размеры и межстрочный интервалы: от экрана 360px до 1280px */
-  --fs-text: clamp(1rem, 0.951rem + 0.217vw, 1.125rem);      /* 16px → 18px */
-  --fs-heading: clamp(1.5rem, 1.304rem + 0.87vw, 2rem);      /* 24px → 32px */
+  /* Размеры и межстрочный интервалы */
+  --fs-text: clamp(1rem, 0.951rem + 0.217vw, 1.125rem);      
+  --fs-heading: clamp(1.5rem, 1.304rem + 0.87vw, 2rem);      
+  --fs-small: clamp(0.875rem, 0.85rem + 0.11vw, 0.9375rem);
 
   --lh-text: 1.5;
   --lh-heading: 1.2;
 }
 
-
-/*dark theme */
-@media (prefers-color-scheme: dark) {
+@media (max-width: 640px) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
+    --navbar-h: 5.5rem;
   }
 }
