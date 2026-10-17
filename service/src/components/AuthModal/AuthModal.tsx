@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
+import { useContext, useEffect, useRef, useState, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
 import { useLenis } from 'lenis/react'
-import { AnimatePresence, MotionConfig, motion, useAnimate } from 'motion/react'
+import { AnimatePresence, MotionConfig, PresenceContext, motion, useAnimate } from 'motion/react'
 import googleIcon from '../../assets/google.png'
 import styles from './AuthModal.module.css'
 
@@ -453,13 +453,14 @@ function ErrorText({ message }: { message: string }) {
 }
 
 function Collapse({ children, inner = styles.collapseInner }: { children: ReactNode; inner?: string }) {
-  const [opened, setOpened] = useState(false)
+  const shownWithoutAnimation = useContext(PresenceContext)?.initial === false
+  const [animating, setAnimating] = useState(!shownWithoutAnimation)
 
   return (
     <motion.div
-      style={{ overflow: opened ? 'visible' : 'hidden' }}
-      onAnimationStart={() => setOpened(false)}
-      onAnimationComplete={(target) => setOpened((target as { height?: unknown }).height === 'auto')}
+      style={{ overflow: animating ? 'hidden' : 'visible' }}
+      onAnimationStart={() => setAnimating(true)}
+      onAnimationComplete={() => setAnimating(false)}
       initial={{ height: 0, opacity: 0 }}
       animate={{
         height: 'auto',
