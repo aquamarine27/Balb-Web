@@ -7,7 +7,7 @@
   --close-ease: cubic-bezier(0.65, 0, 0.35, 1);
   --soft-ease: cubic-bezier(0.33, 1, 0.68, 1); 
 
-  /* fixed и z-index явно: Safari не знает overlay и при закрытии сразу выкидывает dialog из верхнего слоя */
+  
   position: fixed;
   z-index: 100;
   inset: 0;
@@ -26,23 +26,27 @@
   justify-items: center;
   row-gap: 2rem;
 
-  /* фон и размытие на самом dialog, а не в ::backdrop — тот в Safari пропадает без анимации */
+  
   background: transparent;
   backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
 
   /* держит dialog на экране, пока проигрывается анимация закрытия */
   transition:
     background-color var(--close-duration) var(--close-ease),
     backdrop-filter var(--close-duration) var(--close-ease),
+    -webkit-backdrop-filter var(--close-duration) var(--close-ease),
     display var(--close-duration) allow-discrete,
     overlay var(--close-duration) allow-discrete;
 
   &[open] {
     background: light-dark(rgb(255 255 255 / 0.4), rgb(0 0 0 / 0.4));
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition:
       background-color var(--duration) var(--ease),
-      backdrop-filter var(--duration) var(--ease);
+      backdrop-filter var(--duration) var(--ease),
+      -webkit-backdrop-filter var(--duration) var(--ease);
   }
 
   &:not([open]) {
@@ -144,6 +148,7 @@
   .dialog[open] {
     background: transparent;
     backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
   }
 
   .dialog[open] .searchRow {
