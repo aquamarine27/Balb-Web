@@ -1,10 +1,10 @@
 .card {
   position: relative;
   width: 100%;
-  max-width: 15.625rem;
+  max-width: var(--card-max, 15.625rem);
   aspect-ratio: 250 / 360;
   overflow: hidden;
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   background: black;
   container-type: inline-size;
 }
