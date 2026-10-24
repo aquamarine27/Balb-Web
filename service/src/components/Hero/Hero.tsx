@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import type { Quiz } from '../../types'
 import styles from './Hero.module.css'
@@ -23,18 +23,21 @@ const slide = {
   }),
 }
 
+
+const blur = (px: number) => (window.matchMedia('(pointer: coarse)').matches ? {} : { filter: `blur(${px}px)` })
+
 const word = {
-  enter: { opacity: 0, y: '35%', filter: 'blur(10px)' },
+  enter: { opacity: 0, y: '35%', ...blur(10) },
   center: (i: number) => ({
     opacity: 1,
     y: '0%',
-    filter: 'blur(0px)',
+    ...blur(0),
     transition: { duration: 1.7, ease: EASE, delay: 0.6 + i * 0.08 },
   }),
   exit: {
     opacity: 0,
     y: '-25%',
-    filter: 'blur(10px)',
+    ...blur(10),
     transition: { duration: 0.8, ease: SOFT },
   },
 }
@@ -45,7 +48,18 @@ interface Props {
 
 export default function Hero({ quizzes }: Props) {
   const [[index, direction], setSlide] = useState([0, 1])
+  const ref = useRef<HTMLElement>(null)
   const quiz = quizzes[index]
+  const ready = Boolean(quiz)
+
+  // автопрокрутка на паузе, пока баннер за экраном
+  useEffect(() => {
+    const hero = ref.current
+    if (!hero) return
+    const observer = new IntersectionObserver(([entry]) => hero.toggleAttribute('data-paused', !entry.isIntersecting))
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [ready])
 
   const go = (next: number, dir = next > index ? 1 : -1) => {
     if (next === index) return
@@ -56,7 +70,7 @@ export default function Hero({ quizzes }: Props) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <section className={styles.hero} aria-roledescription="carousel" aria-label="Featured quizzes" data-nav="var(--nav-on-accent)">
+      <section ref={ref} className={styles.hero} aria-roledescription="carousel" aria-label="Featured quizzes" data-nav="var(--nav-on-accent)">
         <AnimatePresence initial={false} custom={direction}>
           <motion.article
             key={quiz.id}

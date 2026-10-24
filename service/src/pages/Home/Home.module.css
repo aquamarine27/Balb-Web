@@ -52,6 +52,12 @@
   }
 }
 
+.gridWrap {
+  overflow: clip;
+  overflow-clip-margin: 1rem;
+  transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .grid {
   --card-max: none;
 
@@ -59,6 +65,12 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(0.75rem, 2vw, 2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gridWrap {
+    transition: none;
+  }
 }
 
 @media (max-width: 900px) {

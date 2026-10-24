@@ -95,6 +95,10 @@
   animation: progress linear forwards;
 }
 
+.hero[data-paused] .fill {
+  animation-play-state: paused;
+}
+
 @keyframes progress {
   from {
     clip-path: inset(0 100% 0 0 round 999px);
