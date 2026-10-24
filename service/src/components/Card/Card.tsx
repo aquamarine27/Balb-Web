@@ -7,7 +7,7 @@ interface Props {
 
 export default function Card({ quiz }: Props) {
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-nav="var(--nav-on-dark)">
       {quiz.imageUrl && <img className={styles.image} src={quiz.imageUrl} alt="" loading="lazy" />}
 
       <div className={styles.content}>

@@ -23,6 +23,11 @@
   --avatar-bg: #7b7ff0;
   --link-underline: light-dark(rgba(123, 127, 240, 0.7), rgba(165, 168, 255, 0.7));
   --danger: light-dark(#ef4444, #f87171);
+  --nav-on-accent: #fff;
+  --nav-on-dark: #c9b0f5;
+  --scrollbar-track: #08060d;
+  --scrollbar: color-mix(in srgb, var(--accent) 65%, #fff);
+  --scrollbar-hover: color-mix(in srgb, var(--accent) 40%, #fff);
 
   /* Тени */
   --shadow-sm: 0 2px 8px light-dark(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.5));
@@ -32,10 +37,12 @@
   --container: max(70vw, 23rem); 
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --navbar-h: 10rem;
+  --navbar-h-scrolled: 5.5rem;
 
   /* Скругление */
   --radius: 2.25rem; /* 36px */
   --radius-sm: 0.875rem; /* 14px — поля ввода, небольшие кнопки */
+  --radius-card: 2.25rem; /* 36px, на телефонах 32px */
 
   /* Шрифты */
   --font-text: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -58,5 +65,7 @@
 @media (max-width: 640px) {
   :root {
     --navbar-h: 5.5rem;
+    --navbar-h-scrolled: 4.25rem;
+    --radius-card: 2rem;
   }
 }

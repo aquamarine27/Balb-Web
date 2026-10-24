@@ -7,6 +7,9 @@
   --close-ease: cubic-bezier(0.65, 0, 0.35, 1);
   --soft-ease: cubic-bezier(0.33, 1, 0.68, 1); 
 
+  
+  position: fixed;
+  z-index: 100;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -15,7 +18,6 @@
   margin: 0;
   padding: max(0.5rem, (var(--navbar-h) - var(--field-h)) / 2) var(--gutter) 0;
   border: none;
-  background: none;
   overflow: hidden;
   outline: none;
 
@@ -24,30 +26,36 @@
   justify-items: center;
   row-gap: 2rem;
 
+  
+  background: transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+
   /* держит dialog на экране, пока проигрывается анимация закрытия */
   transition:
+    background-color var(--close-duration) var(--close-ease),
+    backdrop-filter var(--close-duration) var(--close-ease),
+    -webkit-backdrop-filter var(--close-duration) var(--close-ease),
     display var(--close-duration) allow-discrete,
     overlay var(--close-duration) allow-discrete;
+
+  &[open] {
+    background: light-dark(rgb(255 255 255 / 0.4), rgb(0 0 0 / 0.4));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      background-color var(--duration) var(--ease),
+      backdrop-filter var(--duration) var(--ease),
+      -webkit-backdrop-filter var(--duration) var(--ease);
+  }
 
   &:not([open]) {
     display: none;
   }
 }
 
-
 .dialog::backdrop {
-  background: light-dark(rgb(255 255 255 / 0.4), rgb(0 0 0 / 0.4));
-  backdrop-filter: blur(12px);
-  opacity: 0;
-  transition:
-    opacity var(--close-duration) var(--close-ease),
-    display var(--close-duration) allow-discrete,
-    overlay var(--close-duration) allow-discrete;
-}
-
-.dialog[open]::backdrop {
-  opacity: 1;
-  transition: opacity var(--duration) var(--ease);
+  background: transparent;
 }
 
 .searchRow,
@@ -132,10 +140,15 @@
 }
 
 @starting-style {
-  .dialog[open]::backdrop,
   .dialog[open] .searchRow,
   .dialog[open] .panel {
     opacity: 0;
+  }
+
+  .dialog[open] {
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
   }
 
   .dialog[open] .searchRow {
@@ -377,10 +390,29 @@
   overflow: hidden;
 }
 
+
+@media (max-width: 640px) {
+  .dialog {
+    --panel-w: 100%;
+    --field-h: 3.25rem;
+
+    padding: 0.75rem 0.75rem 0;
+    row-gap: 0.75rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .field {
+    min-width: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dialog,
-  .dialog::backdrop,
-  .dialog[open]::backdrop,
+  .dialog[open],
   .searchRow,
   .panel,
   .dialog[open] .searchRow,

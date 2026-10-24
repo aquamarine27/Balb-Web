@@ -4,10 +4,13 @@ import { ReactLenis } from 'lenis/react'
 import MainLayout from './layouts/MainLayout'
 import Home from './pages/Home/Home'
 
+// для тач устройств
+const SMOOTH_SCROLL = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
 function App() {
   return (
     <BrowserRouter>
-      <ReactLenis root />
+      {SMOOTH_SCROLL && <ReactLenis root options={{ lerp: 0.07 }} />}
       <Routes>
         <Route element={<MainLayout />}>
           <Route index element={<Home />} />

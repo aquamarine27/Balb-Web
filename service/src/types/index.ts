@@ -9,4 +9,5 @@ export interface Quiz {
   title: string;
   imageUrl: string | null;
   duration: number; // минуты или секунды пока хз
+  category: string;
 }

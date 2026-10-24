@@ -3,7 +3,11 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --close-duration: 0.4s;
   --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --blur: 12px;
 
+  
+  position: fixed;
+  z-index: 100;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -12,7 +16,6 @@
   margin: 0;
   padding: var(--gutter);
   border: none;
-  background: none;
   outline: none;
   overflow-y: auto;
   scrollbar-width: none;
@@ -20,9 +23,23 @@
   display: grid;
   place-items: center;
 
+  
+  background: transparent;
+  backdrop-filter: blur(0px);
+
   transition:
+    background-color var(--close-duration) var(--ease-io),
+    backdrop-filter var(--close-duration) var(--ease-io),
     display var(--close-duration) allow-discrete,
     overlay var(--close-duration) allow-discrete;
+
+  &[open] {
+    background: light-dark(rgb(255 255 255 / 0.4), rgb(0 0 0 / 0.4));
+    backdrop-filter: blur(var(--blur));
+    transition:
+      background-color var(--duration) var(--ease),
+      backdrop-filter var(--duration) var(--ease);
+  }
 
   &:not([open]) {
     display: none;
@@ -30,24 +47,13 @@
 }
 
 .dialog::backdrop {
-  background: light-dark(rgb(255 255 255 / 0.4), rgb(0 0 0 / 0.4));
-  backdrop-filter: blur(12px);
-  opacity: 0;
-  transition:
-    opacity var(--close-duration) var(--ease-io),
-    display var(--close-duration) allow-discrete,
-    overlay var(--close-duration) allow-discrete;
+  background: transparent;
 }
 
 @media (max-width: 640px) {
-  .dialog::backdrop {
-    backdrop-filter: blur(8px);
+  .dialog {
+    --blur: 8px;
   }
-}
-
-.dialog[open]::backdrop {
-  opacity: 1;
-  transition: opacity var(--duration) var(--ease);
 }
 
 .card {
@@ -74,9 +80,13 @@
 }
 
 @starting-style {
-  .dialog[open]::backdrop,
   .dialog[open] .card {
     opacity: 0;
+  }
+
+  .dialog[open] {
+    background: transparent;
+    backdrop-filter: blur(0px);
   }
 
   .dialog[open] .card {
@@ -523,8 +533,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dialog,
-  .dialog::backdrop,
-  .dialog[open]::backdrop,
+  .dialog[open],
   .card,
   .dialog[open] .card,
   .pupil,
